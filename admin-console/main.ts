@@ -1,3 +1,3 @@
-import { AdminConsoleApp } from './AdminConsoleApp';
+import { runAdminConsole } from './admin-console';
 
-new AdminConsoleApp().run();
+runAdminConsole();

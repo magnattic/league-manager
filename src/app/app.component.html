@@ -1,0 +1,29 @@
+<header>
+  <h1 class="hidden-xs">
+    {{ title }}
+  </h1>
+  <h3 class="visible-xs col-xs-7">
+    {{ title }}
+  </h3>
+  <span class="subheading">
+    <span class="hidden-xs">Built with <img src="assets/angular.svg" class="logo" />Angular2</span>
+  </span>
+  <div class="user"></div>
+</header>
+
+<router-outlet></router-outlet>
+
+<ul>
+  <li class="text" *ngFor="let item of (players$ | async)">
+    {{ item }}
+  </li>
+</ul>
+
+<div *ngIf="(firebase.user | async) as user; else showLogin">
+  <h1>Hello {{ user.display }}!</h1>
+  <button (click)="logout()">Logout</button>
+</div>
+<ng-template #showLogin>
+  <p>Please login.</p>
+  <button (click)="login()">Login with Google</button>
+</ng-template>

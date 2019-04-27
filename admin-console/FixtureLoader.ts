@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { Fixture } from '../src/app/fixture';
+import { Fixture } from 'src/app/fixtures/fixture';
 
 export class FixtureLoader {
   public fixtures: Fixture[];
@@ -7,12 +7,12 @@ export class FixtureLoader {
   constructor(private filePath: string) {}
 
   public load() {
-    let fixturesJson = fs.readFileSync(this.filePath, 'utf8');
+    const fixturesJson = fs.readFileSync(this.filePath, 'utf8');
     this.fixtures = JSON.parse(fixturesJson);
   }
 
   public getNextMatchNumber() {
-    let matchNumbers = this.fixtures.map(fix => fix.matchNumber || 0  );
+    const matchNumbers = this.fixtures.map(fix => fix.matchNumber || 0);
     let previousMax: number = Math.max.apply(null, matchNumbers);
     return ++previousMax;
   }

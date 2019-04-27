@@ -1,15 +1,11 @@
-import { LeagueOverviewComponent } from './components/league-overview/league-overview.component';
-import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { LeagueOverviewComponent } from './league-overview/league-overview.component';
 
-const appRoutes: Routes = [
-  { path: '', component: LeagueOverviewComponent, pathMatch: 'full' }
-];
+const routes: Routes = [{ path: '', component: LeagueOverviewComponent, pathMatch: 'full' }];
 
 @NgModule({
-    imports: [RouterModule.forRoot(appRoutes)],
-    exports: [RouterModule],
-    declarations: [],
-    providers: []
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
