@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { auth } from 'firebase';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import * as fromRoot from './reducers';
+import * as fromLeague from './reducers/league-overview.reducer';
+import { Fixture } from './fixtures/fixture';
 
 @Component({
   selector: 'lm-app',
@@ -12,13 +14,10 @@ import { map } from 'rxjs/operators';
 })
 export class AppComponent {
   title = 'African Championships';
-  public readonly players$: Observable<string[]>;
+  public readonly playersNames$: Observable<string[]>;
 
-  constructor(db: AngularFirestore, public firebase: AngularFireAuth) {
-    this.players$ = db
-      .collection<{ name: string }>('players')
-      .valueChanges()
-      .pipe(map(entries => entries.map(entry => entry.name)));
+  constructor(store: Store<fromRoot.State>, public firebase: AngularFireAuth) {
+    this.playersNames$ = store.select(fromLeague.getPlayerNames);
 
     if (this.firebase.auth.isSignInWithEmailLink(window.location.href)) {
       const email = window.localStorage.getItem('emailForSignIn') || window.prompt('Please provide your email for confirmation');

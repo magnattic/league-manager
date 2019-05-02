@@ -1,7 +1,11 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+
 header {
   position: relative;
   margin: 0 0 20px 0;
-  background-color: firebrick;
+  background-color: darkorange;
   color: white;
   overflow: auto;
   padding: 25px 25px 10px 25px;
@@ -15,10 +19,30 @@ h3 {
   overflow: hidden;
 }
 
+.title--desktop {
+  display: none;
+
+  @include media-breakpoint-up(sm) {
+    display: block;
+  }
+}
+
+.title--mobile {
+  display: none;
+
+  @include media-breakpoint-down(xs) {
+    display: block;
+  }
+}
+
 .subheading {
+  @include media-breakpoint-down(xs) {
+    display: none;
+  }
+
   position: absolute;
-  top: 60px;
-  left: 265px;
+  top: 63px;
+  left: 280px;
   $size: 10px;
   font-size: $size;
   line-height: $size;

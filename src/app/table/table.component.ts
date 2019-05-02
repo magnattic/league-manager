@@ -1,12 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { TableCalculatorService } from '../fixtures/table-calculator.service';
-import { TableEntry } from '../fixtures/table-entry';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { TableEntry } from './table-entry';
 
 @Component({
   selector: 'lm-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.css']
+  styleUrls: ['./table.component.scss']
 })
 export class TableComponent {
   private selectedPlayer: string;

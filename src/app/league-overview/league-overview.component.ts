@@ -4,9 +4,11 @@ import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, withLatestFrom, tap } from 'rxjs/operators';
 import { Fixture, isComplete } from '../fixtures/fixture';
-import { TableCalculatorService, SortOptions } from '../fixtures/table-calculator.service';
-import { TableEntry } from '../fixtures/table-entry';
+import { TableEntry } from '../table/table-entry';
 import { State } from '../reducers';
+import * as fromLeague from '../reducers/league-overview.reducer';
+import { sortOptionsChanged } from '../actions/table.actions';
+import { SortOptions } from '../table/table-calculation';
 
 @Component({
   selector: 'lm-league-overview',
@@ -22,9 +24,9 @@ export class LeagueOverviewComponent implements OnInit {
   public latestFixtures$: Observable<Fixture[]>;
   public searchTerm$ = new BehaviorSubject<string>(null);
 
-  constructor(private store: Store<State>, private tableCalculator: TableCalculatorService) {
-    this.fixtures$ = this.store.select(state => state.leagueOverview.fixtures).pipe(tap(console.log));
-    this.table$ = this.tableCalculator.getTable(this.fixtures$);
+  constructor(private store: Store<State>) {
+    this.fixtures$ = this.store.select(fromLeague.getFixtures);
+    this.table$ = this.store.select(fromLeague.getTable);
   }
 
   ngOnInit(): void {
@@ -55,8 +57,8 @@ export class LeagueOverviewComponent implements OnInit {
     return this.getFixtures().pipe(map(fixtures => fixtures.filter(fix => isComplete(fix))));
   }
 
-  public sortTable({ criteria, ascending }: SortOptions) {
-    this.tableCalculator.sortBy(criteria, ascending);
+  public sortTable(sortOptions: SortOptions) {
+    this.store.dispatch(sortOptionsChanged({ sortOptions }));
   }
 
   public onFixtureChange(fixture: Fixture) {
