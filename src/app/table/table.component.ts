@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TableEntry } from './table-entry';
+import { Player } from '../players/player';
+import { TableEntryFull } from './table-entry';
 
 @Component({
   selector: 'lm-table',
@@ -7,26 +8,20 @@ import { TableEntry } from './table-entry';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent {
-  private selectedPlayer: string;
   public sortCriteria: string;
   public sortAscending = true;
 
-  @Input() searchTerm: string;
-  @Input() table: TableEntry[];
-  @Output() selectedPlayerChanged = new EventEmitter();
+  @Input() selectedPlayer: Player;
+  @Input() table: TableEntryFull[];
+  @Output() selectedPlayerChanged = new EventEmitter<string>();
   @Output() sortCriteriaChanged = new EventEmitter<{ criteria: string; ascending: boolean }>();
 
   isHighlighted(playerName: string) {
-    return playerName === this.searchTerm;
+    return this.selectedPlayer && playerName === this.selectedPlayer.name;
   }
 
   selectPlayer(playerName: string) {
-    if (playerName === this.selectedPlayer) {
-      this.selectedPlayer = null;
-    } else {
-      this.selectedPlayer = playerName;
-    }
-    this.selectedPlayerChanged.emit(this.selectedPlayer);
+    this.selectedPlayerChanged.emit(playerName);
   }
 
   sortBy(criteria: string) {

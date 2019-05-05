@@ -8,6 +8,20 @@ export interface TableEntry {
   movement?: string;
 }
 
+export interface TableEntryFull {
+  playerName: string;
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goalsScored: number;
+  goalsConceded: number;
+  goalDifference: number;
+  points: number;
+  pointsPerMatch: number;
+  movement?: string;
+}
+
 export const getGoalDifference = (tableEntry: TableEntry) => tableEntry.goalsScored - tableEntry.goalsConceded;
 
 export const getPoints = (tableEntry: TableEntry) => tableEntry.wins * 3 + tableEntry.draws;
@@ -20,3 +34,13 @@ export const getPointsPerMatch = (tableEntry: TableEntry) => {
   }
   return Math.round((getPoints(tableEntry) / getPlayed(tableEntry)) * 100) / 100;
 };
+
+export function getFullEntry(tableEntry: TableEntry): TableEntryFull {
+  return {
+    ...tableEntry,
+    points: getPoints(tableEntry),
+    pointsPerMatch: getPointsPerMatch(tableEntry),
+    played: getPlayed(tableEntry),
+    goalDifference: getGoalDifference(tableEntry)
+  };
+}

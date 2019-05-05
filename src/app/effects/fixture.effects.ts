@@ -6,6 +6,7 @@ import { of, pipe, throwError } from 'rxjs';
 import { catchError, first, map, switchMap } from 'rxjs/operators';
 import { fixturesLoaded, fixturesLoadFailed, playersLoaded, playersLoadFailed } from '../actions/api.actions';
 import { Fixture } from '../fixtures/fixture';
+import { Player } from '../players/player';
 
 const throwIfEmpty = <T>(error: string) =>
   pipe(
@@ -43,8 +44,9 @@ export class FixtureEffects {
   playersChanged = createEffect(() =>
     this.firestore
       .collection<{ name: string }>('players')
-      .valueChanges()
+      .snapshotChanges()
       .pipe(
+        map(actions => actions.map(a => ({ id: a.payload.doc.id, ...a.payload.doc.data() } as Player))),
         throwIfEmpty("Couldn't load players"),
         map(players => playersLoaded({ players })),
         catchError(error => of(playersLoadFailed({ error: error })))

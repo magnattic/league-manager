@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as readline from 'readline';
 import * as serviceAccount from './.firebase/admin-sdk.json';
-import { generateFixtures } from './fixture-generator';
+import { generateFixtures } from '../src/app/fixtures/fixture-generator';
 
 const listAllUsers = async () => {
   try {

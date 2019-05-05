@@ -3,7 +3,7 @@ import 'jasmine';
 
 describe('generateFixtures', () => {
   it('generates fixtures', () => {
-    const players = ['Dominik', 'Linus'];
+    const players = [{ id: 'dominik', name: 'Dominik' }, { id: 'linus', name: 'Linus' }];
 
     const fixtures = generateFixtures(players);
     console.log(fixtures);

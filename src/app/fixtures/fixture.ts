@@ -1,4 +1,5 @@
 import { FixtureResult } from './fixture-result';
+import { Player } from '../players/player';
 
 export interface Fixture {
   teamA: string;
@@ -25,6 +26,10 @@ export function fromJson(json: Fixture): Fixture {
 
 export function isComplete(fixture: Fixture) {
   return Number.isInteger(fixture.goalsA) && Number.isInteger(fixture.goalsB) && fixture.goalsA > -1 && fixture.goalsB > -1;
+}
+
+export function hasPlayer(fixture: Fixture, player: Player) {
+  return player == null || fixture.teamA === player.name || fixture.teamB === player.name;
 }
 
 export function getResult(fixture: Fixture, team: string) {

@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { Fixture, isComplete } from '../fixtures/fixture';
-import { TableEntry } from './table-entry';
+import { TableEntry, getFullEntry } from './table-entry';
 
 const sortOptions: SortOptions = { criteria: 'points', ascending: false };
 
@@ -15,15 +15,14 @@ export const getTableWithMovement = (fixtures: Fixture[], sortOptions: SortOptio
   const tableSorted = sortTable(table, sortOptions);
   const tableYesterday = getTableYesterday(fixtures, sortOptions);
   const tableWithMovement = setMovement(tableSorted, tableYesterday);
-  return tableWithMovement;
+  const fullTable = tableWithMovement.map(entry => getFullEntry(entry));
+  return fullTable;
 };
 
 export const getTableYesterday = (fixtures: Fixture[], sortOptions: SortOptions) => {
-  const fixturesYesterday = fixtures.map(fixtures => {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    return _.filter(fixtures, fix => fix.dateEntered == null || new Date(fix.dateEntered) <= yesterday);
-  });
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const fixturesYesterday = fixtures.filter(fix => fix.dateEntered == null || new Date(fix.dateEntered) <= yesterday);
   const tableUnsorted = calculateTable(fixturesYesterday);
 
   return sortTable(tableUnsorted, sortOptions);

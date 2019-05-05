@@ -2,9 +2,9 @@
   <div class="row">
     <div class="standing col-xs-12 col-sm-6 col-md-6">
       <lm-table
-        [searchTerm]="searchTerm$ | async"
+        [selectedPlayer]="selectedPlayer$ | async"
         [table]="table$ | async"
-        (selectedPlayerChanged)="searchTerm$.next($event)"
+        (selectedPlayerChanged)="selectedPlayerChanged($event)"
         (sortCriteriaChanged)="sortTable($event)"
       ></lm-table>
     </div>
@@ -12,7 +12,6 @@
       <lm-fixture-list
         title="Latest results"
         [fixtures]="latestFixtures$ | async"
-        [searchTerm]="searchTerm$ | async"
         (fixtureChanged)="onFixtureChange($event)"
       ></lm-fixture-list>
     </div>
@@ -20,7 +19,6 @@
       <lm-fixture-list
         title="Upcoming matches"
         [fixtures]="upcomingfixtures$ | async"
-        [searchTerm]="searchTerm$ | async"
         (fixtureChanged)="onFixtureChange($event)"
       ></lm-fixture-list>
     </div>
