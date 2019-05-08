@@ -12,6 +12,7 @@
       <lm-fixture-list
         title="Latest results"
         [fixtures]="latestFixtures$ | async"
+        [selectedPlayer]="selectedPlayer$ | async"
         (fixtureChanged)="onFixtureChange($event)"
       ></lm-fixture-list>
     </div>

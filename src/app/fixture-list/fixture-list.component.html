@@ -19,7 +19,7 @@
         <input [(ngModel)]="fixture.goalsA" (ngModelChange)="fixtureChanged.emit(fixture)" [readonly]="!(isAdmin$ | async)" /> :
         <input [(ngModel)]="fixture.goalsB" (ngModelChange)="fixtureChanged.emit(fixture)" [readonly]="!(isAdmin$ | async)" />
       </td>
-      <td><i *ngIf="searchTerm" class="fa fa-futbol-o"></i></td>
+      <td><i *ngIf="selectedPlayer" class="fa fa-futbol-o"></i></td>
     </tr>
   </tbody>
 </table>
