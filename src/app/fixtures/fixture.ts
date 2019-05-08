@@ -70,3 +70,7 @@ export function finalizeMatch(fixture: Fixture) {
     dateEntered: isComplete(fixture) ? new Date() : null
   };
 }
+
+export function isSameMatch(a: Fixture, b: Fixture) {
+  return a.teamA === b.teamA && a.teamB === b.teamB;
+}

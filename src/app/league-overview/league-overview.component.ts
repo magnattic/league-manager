@@ -25,7 +25,6 @@ export class LeagueOverviewComponent {
 
   constructor(private store: Store<State>) {
     this.selectedPlayer$ = this.store.select(fromLeague.getSelectedPlayer);
-    this.fixtures$ = this.store.select(fromLeague.getPlayedFixtures);
     this.upcomingfixtures$ = this.store.select(fromLeague.getUpcomingFixtures);
     this.latestFixtures$ = this.store.select(fromLeague.getLatestFixtures);
     this.table$ = this.store.select(fromLeague.getTable);

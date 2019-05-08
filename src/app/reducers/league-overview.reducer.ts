@@ -2,7 +2,7 @@ import { createReducer, createSelector, on } from '@ngrx/store';
 import { orderBy } from 'lodash/fp';
 import { fixturesLoaded, playersLoaded } from '../actions/api.actions';
 import { sortOptionsChanged, playerSelected } from '../actions/table.actions';
-import { Fixture, hasPlayer, isComplete } from '../fixtures/fixture';
+import { Fixture, hasPlayer, isComplete, isSameMatch } from '../fixtures/fixture';
 import { Player } from '../players/player';
 import { getTableWithMovement, SortOptions } from '../table/table-calculation';
 import * as fromRoot from './index';
@@ -58,13 +58,9 @@ export const getSelectedPlayer = createSelector(
   (state, players) => players.find(player => player.name === state.selectedPlayerName)
 );
 
-export const getPlayedFixtures = createSelector(
+const getPlayedFixtures = createSelector(
   getLeagueState,
-  getSelectedPlayer,
-  (state, player) => {
-    const filtered = player ? state.playedFixtures.filter(fix => hasPlayer(fix, player)) : state.playedFixtures;
-    return orderBy([(fix: Fixture) => fix.dateEntered || new Date(2020)], ['desc'])(filtered);
-  }
+  state => state.playedFixtures
 );
 
 const getGeneratedFixtures = createSelector(
@@ -74,21 +70,28 @@ const getGeneratedFixtures = createSelector(
 
 const getFixtures = createSelector(
   getGeneratedFixtures,
+  getPlayedFixtures,
   getSelectedPlayer,
-  (fixtures, selectedPlayer) => {
-    console.log(fixtures, selectedPlayer);
-    return fixtures.filter(fix => hasPlayer(fix, selectedPlayer));
-  }
+  (generatedFixtures, playedFixtures) =>
+    generatedFixtures.map(genFix => playedFixtures.find(played => isSameMatch(played, genFix)) || genFix)
+);
+
+const getFilteredFixtures = createSelector(
+  getFixtures,
+  getSelectedPlayer,
+  (fixtures, selectedPlayer) => fixtures.filter(fix => hasPlayer(fix, selectedPlayer))
 );
 
 export const getUpcomingFixtures = createSelector(
-  getFixtures,
+  getFilteredFixtures,
   fixtures => fixtures.filter(fix => !isComplete(fix))
 );
 
+const orderByDateEntered = orderBy([(fix: Fixture) => fix.dateEntered || new Date(2020)], ['desc']);
+
 export const getLatestFixtures = createSelector(
-  getPlayedFixtures,
-  fixtures => fixtures.filter(fix => isComplete(fix))
+  getFilteredFixtures,
+  fixtures => orderByDateEntered(fixtures.filter(fix => isComplete(fix)))
 );
 
 export const getSortOptions = createSelector(
