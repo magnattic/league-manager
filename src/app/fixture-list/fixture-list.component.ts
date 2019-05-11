@@ -15,7 +15,7 @@ export class FixtureListComponent {
   @Input() public title: string;
   @Output() public fixtureChanged = new EventEmitter<Fixture>();
 
-  @Input() public isAdmin: boolean;
+  @Input() public loggedInUser: Player;
 
   public isResult(fixture, result: string) {
     if (!this.selectedPlayer || !isComplete(fixture)) {

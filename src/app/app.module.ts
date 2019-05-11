@@ -17,9 +17,10 @@ import { LeagueOverviewComponent } from './league-overview/league-overview.compo
 import { metaReducers, ROOT_REDUCERS } from './reducers';
 import { CustomSerializer } from './reducers/custom-route-serializer';
 import { TableComponent } from './table/table.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
-  declarations: [AppComponent, FixtureListComponent, TableComponent, LeagueOverviewComponent],
+  declarations: [AppComponent, FixtureListComponent, TableComponent, LeagueOverviewComponent, LoginComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

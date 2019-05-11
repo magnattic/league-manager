@@ -1,16 +1,18 @@
-import { ActionReducer, ActionReducerMap, createFeatureSelector, createSelector, MetaReducer, Action } from '@ngrx/store';
-import { environment } from '../../environments/environment';
-import { Fixture } from '../fixtures/fixture';
-import { LeagueOverviewState, leagueOverviewReducer } from './league-overview.reducer';
 import { InjectionToken } from '@angular/core';
+import { Action, ActionReducerMap, MetaReducer } from '@ngrx/store';
+import { environment } from '../../environments/environment';
+import { authReducer, AuthState } from './auth.reducer';
+import { leagueOverviewReducer, LeagueOverviewState } from './league-overview.reducer';
 
 export interface State {
   leagueOverview: LeagueOverviewState;
+  auth: AuthState;
 }
 
 export const ROOT_REDUCERS = new InjectionToken<ActionReducerMap<State, Action>>('Root reducers token', {
   factory: () => ({
-    leagueOverview: leagueOverviewReducer
+    leagueOverview: leagueOverviewReducer,
+    auth: authReducer
   })
 });
 

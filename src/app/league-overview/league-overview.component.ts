@@ -10,6 +10,7 @@ import * as fromLeague from '../reducers/league-overview.reducer';
 import { sortOptionsChanged, playerSelected } from '../actions/table.actions';
 import { SortOptions } from '../table/table-calculation';
 import { Player } from '../players/player';
+import { fixtureResultEntered } from '../actions/fixture-list.actions';
 
 @Component({
   selector: 'lm-league-overview',
@@ -39,6 +40,6 @@ export class LeagueOverviewComponent {
   }
 
   public onFixtureChange(fixture: Fixture) {
-    // this.fixtureService.updateResult(fixture);
+    this.store.dispatch(fixtureResultEntered({ fixture }));
   }
 }

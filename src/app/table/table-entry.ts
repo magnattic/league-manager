@@ -19,7 +19,7 @@ export interface TableEntryFull {
   goalDifference: number;
   points: number;
   pointsPerMatch: number;
-  movement?: string;
+  movement?: 'up' | 'down';
 }
 
 export const getGoalDifference = (tableEntry: TableEntry) => tableEntry.goalsScored - tableEntry.goalsConceded;

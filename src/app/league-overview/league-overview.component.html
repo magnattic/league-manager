@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="standing col-xs-12 col-sm-6 col-md-6">
+    <div class="standing col-xs-12 col-sm-12 col-md-8 col-lg-12 col-xl-6">
       <lm-table
         [selectedPlayer]="selectedPlayer$ | async"
         [table]="table$ | async"
@@ -16,7 +16,7 @@
         (fixtureChanged)="onFixtureChange($event)"
       ></lm-fixture-list>
     </div>
-    <div class="fixtures col-xs-12 col-sm-12  col-md-3">
+    <div class="fixtures col-xs-12 col-sm-6 col-md-3">
       <lm-fixture-list
         title="Upcoming matches"
         [fixtures]="upcomingfixtures$ | async"

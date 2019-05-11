@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import * as fromRoot from './reducers';
+import * as fromAuth from './reducers/auth.reducer';
 import * as fromLeague from './reducers/league-overview.reducer';
-import { Fixture } from './fixtures/fixture';
+import { UserInfo } from 'firebase';
 
 @Component({
   selector: 'lm-app',
@@ -15,9 +15,11 @@ import { Fixture } from './fixtures/fixture';
 export class AppComponent {
   title = 'African Championships';
   public readonly playersNames$: Observable<string[]>;
+  public readonly user$: Observable<UserInfo>;
 
   constructor(store: Store<fromRoot.State>, public firebase: AngularFireAuth) {
     this.playersNames$ = store.select(fromLeague.getPlayerNames);
+    this.user$ = store.select(fromAuth.getUser);
 
     if (this.firebase.auth.isSignInWithEmailLink(window.location.href)) {
       const email = window.localStorage.getItem('emailForSignIn') || window.prompt('Please provide your email for confirmation');
@@ -41,12 +43,9 @@ export class AppComponent {
     }
   }
 
-  login() {
-    // this.afAuth.auth.createUserWithEmailAndPassword('dominik@nuszpl.de', 'absdsdasd');
-    window.localStorage.setItem('emailForSignIn', 'dominik@nuszpl.de');
-    this.firebase.auth
-      .sendSignInLinkToEmail('dominik@nuszpl.de', { url: 'http://localhost:4200', handleCodeInApp: true })
-      .then(console.log);
+  login(email: string) {
+    window.localStorage.setItem('emailForSignIn', email);
+    this.firebase.auth.sendSignInLinkToEmail(email, { url: 'http://localhost:4200', handleCodeInApp: true }).then(console.log);
   }
 
   logout() {
