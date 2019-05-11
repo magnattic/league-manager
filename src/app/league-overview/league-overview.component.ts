@@ -1,16 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as _ from 'lodash';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, withLatestFrom, tap } from 'rxjs/operators';
-import { Fixture, isComplete } from '../fixtures/fixture';
-import { TableEntry } from '../table/table-entry';
+import { Observable } from 'rxjs';
+import { fixtureResultEntered } from '../actions/fixture-list.actions';
+import { playerSelected, sortOptionsChanged } from '../actions/table.actions';
+import { Fixture } from '../fixtures/fixture';
+import { Player } from '../players/player';
 import { State } from '../reducers';
 import * as fromLeague from '../reducers/league-overview.reducer';
-import { sortOptionsChanged, playerSelected } from '../actions/table.actions';
 import { SortOptions } from '../table/table-calculation';
-import { Player } from '../players/player';
-import { fixtureResultEntered } from '../actions/fixture-list.actions';
+import { TableEntry } from '../table/table-entry';
 
 @Component({
   selector: 'lm-league-overview',

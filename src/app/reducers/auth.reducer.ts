@@ -5,14 +5,7 @@ export interface AuthState {
 }
 
 export const initialState: AuthState = {
-  user: {
-    uid: 'dominik',
-    displayName: 'Dominik',
-    email: 'dominik@enyway.com',
-    phoneNumber: null,
-    photoURL: null,
-    providerId: 'email'
-  }
+  user: null
 };
 
 export const authReducer = createReducer([], initialState);

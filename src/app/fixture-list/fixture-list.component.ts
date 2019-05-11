@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Fixture, isComplete, getResult } from '../fixtures/fixture';
-import { Observable } from 'rxjs';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Fixture, getResult, isComplete } from '../fixtures/fixture';
 import { FixtureResult } from '../fixtures/fixture-result';
 import { Player } from '../players/player';
 
@@ -17,7 +16,7 @@ export class FixtureListComponent {
 
   @Input() public loggedInUser: Player;
 
-  public isResult(fixture, result: string) {
+  public isResult(fixture: Fixture, result: keyof typeof FixtureResult) {
     if (!this.selectedPlayer || !isComplete(fixture)) {
       return false;
     }

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
-import { of, pipe, throwError, from } from 'rxjs';
-import { catchError, first, map, switchMap, withLatestFrom, mapTo } from 'rxjs/operators';
-import { fixturesLoaded, fixturesLoadFailed, playersLoaded, playersLoadFailed, fixtureResultAdded } from '../actions/api.actions';
+import { from, of, pipe, throwError } from 'rxjs';
+import { catchError, first, map, mapTo, switchMap } from 'rxjs/operators';
+import { fixtureResultAdded, fixturesLoaded, fixturesLoadFailed, playersLoaded, playersLoadFailed } from '../actions/api.actions';
+import { fixtureResultEntered } from '../actions/fixture-list.actions';
 import { Fixture } from '../fixtures/fixture';
 import { Player } from '../players/player';
-import { fixtureResultEntered } from '../actions/fixture-list.actions';
 
 const throwIfEmpty = <T>(error: string) =>
   pipe(

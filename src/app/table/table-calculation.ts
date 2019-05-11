@@ -1,8 +1,6 @@
 import * as _ from 'lodash';
 import { Fixture, isComplete } from '../fixtures/fixture';
-import { TableEntry, getFullEntry } from './table-entry';
-
-const sortOptions: SortOptions = { criteria: 'points', ascending: false };
+import { getFullEntry, TableEntry } from './table-entry';
 
 const sortTable = (table: TableEntry[], sortOptions: SortOptions) => {
   const order = sortOptions.ascending ? 'asc' : 'desc';
