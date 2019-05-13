@@ -41,8 +41,6 @@ export const runAdminConsole = () => {
         const x = await admin.auth().createUser({ displayName: parts[1], email: parts[2] });
         console.log(x);
         break;
-      case 'create-fixtures':
-        const fixtures = generateFixtures(['dominik', 'linus', 'steffen']);
       case 'delete-user':
         try {
           const user = await admin.auth().getUserByEmail(parts[1]);
