@@ -16,17 +16,8 @@ export interface LeagueOverviewState {
 }
 
 const initialState: LeagueOverviewState = {
-  playedFixtures: [
-    {
-      teamA: 'Dominik',
-      teamB: 'Linus',
-      goalsA: 1,
-      goalsB: 0,
-      dateEntered: new Date(),
-      matchNumber: 1
-    }
-  ],
-  players: [{ id: 'dominik', name: 'Dominik' }, { id: 'linus', name: 'Linus' }],
+  playedFixtures: [],
+  players: [],
   selectedPlayerName: null,
   sortOptions: { criteria: 'points', ascending: false }
 };

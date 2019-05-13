@@ -13,7 +13,7 @@ import * as fromLeague from './reducers/league-overview.reducer';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'African Championships';
+  title = 'African Championships - Season 2';
   public readonly playersNames$: Observable<string[]>;
   public readonly user$: Observable<UserInfo>;
 
