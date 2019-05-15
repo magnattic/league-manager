@@ -14,7 +14,7 @@ export class FixtureListComponent {
   @Input() public title: string;
   @Output() public fixtureChanged = new EventEmitter<Fixture>();
 
-  @Input() public loggedInUser: Player;
+  @Input() public isReadonly: boolean;
 
   public isResult(fixture: Fixture, result: keyof typeof FixtureResult) {
     if (!this.selectedPlayer || !isComplete(fixture)) {

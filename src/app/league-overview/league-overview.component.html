@@ -13,6 +13,7 @@
         title="Latest results"
         [fixtures]="latestFixtures$ | async"
         [selectedPlayer]="selectedPlayer$ | async"
+        [isReadonly]="true"
         (fixtureChanged)="onFixtureChange($event)"
       ></lm-fixture-list>
     </div>
@@ -20,6 +21,7 @@
       <lm-fixture-list
         title="Upcoming matches"
         [fixtures]="upcomingfixtures$ | async"
+        [isReadonly]="(user$ | async) == null"
         (fixtureChanged)="onFixtureChange($event)"
       ></lm-fixture-list>
     </div>

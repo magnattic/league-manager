@@ -7,6 +7,7 @@ import { Fixture } from '../fixtures/fixture';
 import { Player } from '../players/player';
 import { State } from '../reducers';
 import * as fromLeague from '../reducers/league-overview.reducer';
+import * as fromAuth from '../reducers/auth.reducer';
 import { SortOptions } from '../table/table-calculation';
 import { TableEntry } from '../table/table-entry';
 
@@ -21,12 +22,14 @@ export class LeagueOverviewComponent {
   public readonly table$: Observable<TableEntry[]>;
   public upcomingfixtures$: Observable<Fixture[]>;
   public latestFixtures$: Observable<Fixture[]>;
+  public readonly user$: Observable<Player>;
 
   constructor(private store: Store<State>) {
     this.selectedPlayer$ = this.store.select(fromLeague.getSelectedPlayer);
     this.upcomingfixtures$ = this.store.select(fromLeague.getUpcomingFixtures);
     this.latestFixtures$ = this.store.select(fromLeague.getLatestFixtures);
     this.table$ = this.store.select(fromLeague.getTable);
+    this.user$ = this.store.select(fromAuth.getUser);
   }
 
   public sortTable(sortOptions: SortOptions) {
