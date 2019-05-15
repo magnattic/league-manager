@@ -18,6 +18,7 @@ import { metaReducers, ROOT_REDUCERS } from './reducers';
 import { CustomSerializer } from './reducers/custom-route-serializer';
 import { TableComponent } from './table/table.component';
 import { LoginComponent } from './login/login.component';
+import { AuthEffects } from './effects/auth.effects';
 
 @NgModule({
   declarations: [AppComponent, FixtureListComponent, TableComponent, LeagueOverviewComponent, LoginComponent],
@@ -33,7 +34,7 @@ import { LoginComponent } from './login/login.component';
         strictStateSerializability: true
       }
     }),
-    EffectsModule.forRoot([FixtureEffects]),
+    EffectsModule.forRoot([FixtureEffects, AuthEffects]),
     StoreRouterConnectingModule.forRoot({
       serializer: CustomSerializer
     }),

@@ -1,11 +1,12 @@
-<div *ngIf="user; else showLogin">Hello {{ user.displayName }}!</div>
+<div *ngIf="player; else showLogin">Hello {{ player.name }}!</div>
 <ng-template #showLogin>
-  <p>Please login.</p>
-  <select (ngModel)="(selectedMail)">
-    <option>Select User</option>
-    <option class="text" *ngFor="let user of users" [value]="user.email">
-      {{ user }}
-    </option>
-  </select>
-  <button (click)="emailLoginRequested.emit(selectedMail)">Login via mail</button>
+  <div class="login">
+    <select [(ngModel)]="selectedId">
+      <option value="" hidden>Select User</option>
+      <option class="text" *ngFor="let player of players" [value]="player.id">
+        {{ player.name }}
+      </option>
+    </select>
+    <button (click)="emailLoginRequested.emit(selectedId)">Login via mail</button>
+  </div>
 </ng-template>

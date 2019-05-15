@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { UserInfo } from 'firebase';
+import { Player } from '../players/player';
 
 @Component({
   selector: 'lm-login',
@@ -7,9 +7,9 @@ import { UserInfo } from 'firebase';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  @Input() user: UserInfo;
-  @Input() users: UserInfo[];
+  @Input() player: Player;
+  @Input() players: Player[];
   @Output() emailLoginRequested = new EventEmitter<string>();
 
-  selectedMail: string;
+  public selectedId = '';
 }

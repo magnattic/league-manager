@@ -3,10 +3,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { from, of, pipe, throwError } from 'rxjs';
-import { catchError, first, map, mapTo, switchMap } from 'rxjs/operators';
+import { catchError, first, map, mapTo, switchMap, filter, tap } from 'rxjs/operators';
 import { fixtureResultAdded, fixturesLoaded, fixturesLoadFailed, playersLoaded, playersLoadFailed } from '../actions/api.actions';
 import { fixtureResultEntered } from '../actions/fixture-list.actions';
-import { Fixture } from '../fixtures/fixture';
+import { Fixture, isComplete } from '../fixtures/fixture';
 import { Player } from '../players/player';
 
 const throwIfEmpty = <T>(error: string) =>
@@ -58,6 +58,8 @@ export class FixtureEffects {
     this.actions$.pipe(
       ofType(fixtureResultEntered),
       map(action => action.fixture),
+      tap(console.log),
+      filter(fix => isComplete(fix)),
       switchMap(fix => from(this.firestore.collection<Fixture>('fixtures').add(fix)).pipe(mapTo(fixtureResultAdded({ fixture: fix }))))
     )
   );

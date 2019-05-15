@@ -56,7 +56,7 @@ const getPlayedFixtures = createSelector(
 
 const getGeneratedFixtures = createSelector(
   getPlayers,
-  players => generateFixtures(players)
+  players => generateFixtures(players, false)
 );
 
 const getFixtures = createSelector(

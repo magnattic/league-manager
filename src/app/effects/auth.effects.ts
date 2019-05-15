@@ -2,14 +2,28 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
-import { from, of } from 'rxjs';
-import { filter, map, switchMap, tap, first, catchError } from 'rxjs/operators';
-import { userLoginSuccess, userLoginFailed } from '../actions/auth.actions';
+import { from, of, combineLatest } from 'rxjs';
+import { catchError, exhaustMap, filter, first, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { AuthActions } from '../actions/auth.actions';
 import { RouterStateUrl } from '../reducers/custom-route-serializer';
+import { Store } from '@ngrx/store';
+import { getPlayers } from '../reducers/league-overview.reducer';
+import { State } from '../reducers';
 
 @Injectable()
 export class AuthEffects {
-  constructor(private actions$: Actions, private firebase: AngularFireAuth) {}
+  constructor(private actions$: Actions, private readonly store: Store<State>, private readonly firebase: AngularFireAuth) {}
+
+  existingAuth = createEffect(() =>
+    combineLatest(
+      this.firebase.user.pipe(first(user => user != null)),
+      this.store.select(getPlayers).pipe(filter(players => players != null && players.length > 0))
+    ).pipe(
+      map(([user, players]) =>
+        AuthActions.userSessionRestored({ user: players.find(player => player.id === user.email.replace('@enyway.com', '')) })
+      )
+    )
+  );
 
   signInWithEmailLink = createEffect(() =>
     this.actions$.pipe(
@@ -18,11 +32,32 @@ export class AuthEffects {
       filter((action: RouterNavigationAction<RouterStateUrl>) => this.firebase.auth.isSignInWithEmailLink(action.payload.routerState.url)),
       switchMap(action => {
         const email = window.localStorage.getItem('emailForSignIn') || window.prompt('Please provide your email for confirmation');
-        return from(this.firebase.auth.signInWithEmailLink(email, action.payload.routerState.url)).pipe();
+        return from(this.firebase.auth.signInWithEmailLink(email, action.payload.routerState.url));
       }),
       tap(() => window.localStorage.removeItem('emailForSignIn')),
-      map(result => userLoginSuccess({ user: result.user })),
-      catchError(error => of(userLoginFailed({ error })))
+      withLatestFrom(this.store.select(getPlayers).pipe(filter(players => players != null))),
+      map(([result, players]) =>
+        AuthActions.userLoginSuccess({ user: players.find(player => player.id === result.user.email.replace('@enyway.com', '')) })
+      ),
+      catchError(error => of(AuthActions.userLoginFailed({ error })))
+    )
+  );
+
+  sendSignInMail = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.signInMailRequested),
+      tap(console.log),
+      exhaustMap(action => {
+        window.localStorage.setItem('emailForSignIn', action.email);
+        return from(
+          this.firebase.auth
+            .sendSignInLinkToEmail(action.email, { url: window.location.href, handleCodeInApp: true })
+            .then(() => action.email)
+        );
+      }),
+      tap(() => window.alert('Mail sent! Check your inbox and click on the link to log in.')),
+      map(email => AuthActions.signInMailSent({ email })),
+      catchError(error => of(AuthActions.signInMailSendFailed({ error })))
     )
   );
 

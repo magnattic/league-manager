@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Store } from '@ngrx/store';
-import { UserInfo } from 'firebase';
 import { Observable } from 'rxjs';
+import { AuthActions } from './actions/auth.actions';
+import { Player } from './players/player';
 import * as fromRoot from './reducers';
 import * as fromAuth from './reducers/auth.reducer';
 import * as fromLeague from './reducers/league-overview.reducer';
@@ -14,17 +15,16 @@ import * as fromLeague from './reducers/league-overview.reducer';
 })
 export class AppComponent {
   title = 'African Championships - Season 2';
-  public readonly playersNames$: Observable<string[]>;
-  public readonly user$: Observable<UserInfo>;
+  public readonly players$: Observable<Player[]>;
+  public readonly loggedInPlayer$: Observable<Player>;
 
-  constructor(store: Store<fromRoot.State>, public firebase: AngularFireAuth) {
-    this.playersNames$ = store.select(fromLeague.getPlayerNames);
-    this.user$ = store.select(fromAuth.getUser);
+  constructor(private store: Store<fromRoot.State>, public firebase: AngularFireAuth) {
+    this.players$ = store.select(fromLeague.getPlayers);
+    this.loggedInPlayer$ = store.select(fromAuth.getUser);
   }
 
-  login(email: string) {
-    window.localStorage.setItem('emailForSignIn', email);
-    this.firebase.auth.sendSignInLinkToEmail(email, { url: 'http://localhost:4200', handleCodeInApp: true }).then(console.log);
+  login(userId: string) {
+    this.store.dispatch(AuthActions.signInMailRequested({ email: `${userId}@enyway.com` }));
   }
 
   logout() {

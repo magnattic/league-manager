@@ -23,4 +23,6 @@ export class FixtureListComponent {
     const actualResult = getResult(fixture, this.selectedPlayer.name);
     return actualResult === FixtureResult[result];
   }
+
+  public trackByFixture = (_index: number, item: Fixture) => ({ a: item.teamA, b: item.teamB });
 }
