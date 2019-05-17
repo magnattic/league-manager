@@ -4,11 +4,18 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { from, of, combineLatest } from 'rxjs';
 import { catchError, exhaustMap, filter, first, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { AuthActions } from '../actions/auth.actions';
 import { RouterStateUrl } from '../reducers/custom-route-serializer';
 import { Store } from '@ngrx/store';
 import { getPlayers } from '../reducers/league-overview.reducer';
 import { State } from '../reducers';
+import {
+  userSessionRestored,
+  userLoginSuccess,
+  userLoginFailed,
+  signInMailRequested,
+  signInMailSent,
+  signInMailSendFailed
+} from '../actions/auth.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -19,9 +26,7 @@ export class AuthEffects {
       this.firebase.user.pipe(first(user => user != null)),
       this.store.select(getPlayers).pipe(filter(players => players != null && players.length > 0))
     ).pipe(
-      map(([user, players]) =>
-        AuthActions.userSessionRestored({ user: players.find(player => player.id === user.email.replace('@enyway.com', '')) })
-      )
+      map(([user, players]) => userSessionRestored({ user: players.find(player => player.id === user.email.replace('@enyway.com', '')) }))
     )
   );
 
@@ -37,15 +42,15 @@ export class AuthEffects {
       tap(() => window.localStorage.removeItem('emailForSignIn')),
       withLatestFrom(this.store.select(getPlayers).pipe(filter(players => players != null))),
       map(([result, players]) =>
-        AuthActions.userLoginSuccess({ user: players.find(player => player.id === result.user.email.replace('@enyway.com', '')) })
+        userLoginSuccess({ user: players.find(player => player.id === result.user.email.replace('@enyway.com', '')) })
       ),
-      catchError(error => of(AuthActions.userLoginFailed({ error })))
+      catchError(error => of(userLoginFailed({ error })))
     )
   );
 
   sendSignInMail = createEffect(() =>
     this.actions$.pipe(
-      ofType(AuthActions.signInMailRequested),
+      ofType(signInMailRequested),
       tap(console.log),
       exhaustMap(action => {
         window.localStorage.setItem('emailForSignIn', action.email);
@@ -56,8 +61,8 @@ export class AuthEffects {
         );
       }),
       tap(() => window.alert('Mail sent! Check your inbox and click on the link to log in.')),
-      map(email => AuthActions.signInMailSent({ email })),
-      catchError(error => of(AuthActions.signInMailSendFailed({ error })))
+      map(email => signInMailSent({ email })),
+      catchError(error => of(signInMailSendFailed({ error })))
     )
   );
 

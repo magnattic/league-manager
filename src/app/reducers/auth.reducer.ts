@@ -1,6 +1,6 @@
 import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
-import { AuthActions } from '../actions/auth.actions';
 import { Player } from '../players/player';
+import { userSessionRestored } from '../actions/auth.actions';
 
 export interface AuthState {
   user: Player;
@@ -10,10 +10,7 @@ export const initialState: AuthState = {
   user: null
 };
 
-export const authReducer = createReducer<AuthState>(
-  [on(AuthActions.userSessionRestored, (state, action) => ({ ...state, user: action.user }))],
-  initialState
-);
+export const authReducer = createReducer(initialState, on(userSessionRestored, (state, { user }) => ({ ...state, user })));
 
 export const getAuthState = createFeatureSelector<AuthState>('auth');
 

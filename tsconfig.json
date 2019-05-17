@@ -13,7 +13,6 @@
     "alwaysStrict": true,
     "allowJs": false,
     "allowUnusedLabels": false,
-    "incremental": true,
     "noFallthroughCasesInSwitch": true,
     "strictFunctionTypes": true,
     "noImplicitThis": true,

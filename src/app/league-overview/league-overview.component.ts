@@ -6,8 +6,8 @@ import { playerSelected, sortOptionsChanged } from '../actions/table.actions';
 import { Fixture } from '../fixtures/fixture';
 import { Player } from '../players/player';
 import { State } from '../reducers';
-import * as fromLeague from '../reducers/league-overview.reducer';
 import * as fromAuth from '../reducers/auth.reducer';
+import * as fromLeague from '../reducers/league-overview.reducer';
 import { SortOptions } from '../table/table-calculation';
 import { TableEntry } from '../table/table-entry';
 

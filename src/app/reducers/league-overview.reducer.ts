@@ -1,12 +1,12 @@
 import { createReducer, createSelector, on } from '@ngrx/store';
 import { orderBy } from 'lodash/fp';
-import { fixturesLoaded, playersLoaded } from '../actions/api.actions';
-import { sortOptionsChanged, playerSelected } from '../actions/table.actions';
+import { generateFixtures } from 'src/app/fixtures/fixture-generator';
+import { playersLoaded, fixturesLoaded } from '../actions/api.actions';
+import { playerSelected, sortOptionsChanged } from '../actions/table.actions';
 import { Fixture, hasPlayer, isComplete, isSameMatch } from '../fixtures/fixture';
 import { Player } from '../players/player';
 import { getTableWithMovement, SortOptions } from '../table/table-calculation';
 import * as fromRoot from './index';
-import { generateFixtures } from 'src/app/fixtures/fixture-generator';
 
 export interface LeagueOverviewState {
   playedFixtures: Fixture[];
@@ -22,14 +22,15 @@ const initialState: LeagueOverviewState = {
   sortOptions: { criteria: 'points', ascending: false }
 };
 
-export const leagueOverviewReducer = createReducer<LeagueOverviewState>(
-  [
-    on(fixturesLoaded, (state: LeagueOverviewState, { fixtures }) => ({ ...state, fixtures })),
-    on(playersLoaded, (state: LeagueOverviewState, { players }) => ({ ...state, players })),
-    on(sortOptionsChanged, (state: LeagueOverviewState, { sortOptions }) => ({ ...state, sortOptions })),
-    on(playerSelected, (state: LeagueOverviewState, { playerName }) => ({ ...state, selectedPlayerName: playerName }))
-  ],
-  initialState
+export const leagueOverviewReducer = createReducer(
+  initialState,
+  on(fixturesLoaded, (state, { fixtures }) => ({ ...state, playedFixtures: fixtures })),
+  on(playersLoaded, (state, { players }) => ({ ...state, players })),
+  on(sortOptionsChanged, (state, { sortOptions }) => ({ ...state, sortOptions })),
+  on(playerSelected, (state, { playerName }) => ({
+    ...state,
+    selectedPlayerName: state.selectedPlayerName === playerName ? null : playerName
+  }))
 );
 
 export const getLeagueState = (state: fromRoot.State) => state.leagueOverview;
@@ -63,8 +64,10 @@ const getFixtures = createSelector(
   getGeneratedFixtures,
   getPlayedFixtures,
   getSelectedPlayer,
-  (generatedFixtures, playedFixtures) =>
-    generatedFixtures.map(genFix => playedFixtures.find(played => isSameMatch(played, genFix)) || genFix)
+  (generatedFixtures, playedFixtures) => {
+    console.log(generatedFixtures, playedFixtures);
+    return generatedFixtures.map(genFix => playedFixtures.find(played => isSameMatch(played, genFix)) || genFix);
+  }
 );
 
 const getFilteredFixtures = createSelector(
@@ -78,7 +81,7 @@ export const getUpcomingFixtures = createSelector(
   fixtures => fixtures.filter(fix => !isComplete(fix))
 );
 
-const orderByDateEntered = orderBy([(fix: Fixture) => fix.dateEntered || new Date(2020)], ['desc']);
+const orderByDateEntered = orderBy([(fix: Fixture) => new Date(fix.dateEntered || 2020)], ['desc']);
 
 export const getLatestFixtures = createSelector(
   getFilteredFixtures,

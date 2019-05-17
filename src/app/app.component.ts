@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { AuthActions } from './actions/auth.actions';
+import { signInMailRequested } from './actions/auth.actions';
 import { Player } from './players/player';
 import * as fromRoot from './reducers';
 import * as fromAuth from './reducers/auth.reducer';
@@ -24,7 +24,7 @@ export class AppComponent {
   }
 
   login(userId: string) {
-    this.store.dispatch(AuthActions.signInMailRequested({ email: `${userId}@enyway.com` }));
+    this.store.dispatch(signInMailRequested({ email: `${userId}@enyway.com` }));
   }
 
   logout() {

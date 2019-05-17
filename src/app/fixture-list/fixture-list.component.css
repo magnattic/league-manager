@@ -1,18 +1,21 @@
-td, th {
+td,
+th {
   white-space: nowrap;
 }
 
 tr {
   border: none;
-  }
+}
 
 input {
   width: 30px;
   text-align: center;
 }
 
-input:read-only {
-  border: 1px solid #CCC;
+input[readonly],
+input[readonly]:focus {
+  border: 1px solid #ccc;
+  outline: #ccc;
 }
 
 .win i {
@@ -20,7 +23,7 @@ input:read-only {
 }
 
 .draw i {
-  color: #FF6F00;
+  color: #ff6f00;
 }
 
 .loss i {
