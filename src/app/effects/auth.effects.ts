@@ -26,6 +26,7 @@ export class AuthEffects {
       this.firebase.user.pipe(first(user => user != null)),
       this.store.select(getPlayers).pipe(filter(players => players != null && players.length > 0))
     ).pipe(
+      tap(console.log),
       map(([user, players]) => userSessionRestored({ user: players.find(player => player.id === user.email.replace('@enyway.com', '')) }))
     )
   );

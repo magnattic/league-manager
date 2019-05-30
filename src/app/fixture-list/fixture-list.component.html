@@ -1,27 +1,27 @@
-<form>
-  <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th colspan="5">{{ title }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let fixture of fixtures; index as i"
-        [class.win]="isResult(fixture, 'Win')"
-        [class.draw]="isResult(fixture, 'Draw')"
-        [class.loss]="isResult(fixture, 'Loss')"
-        title="Match entered on {{ fixture.dateEntered }}"
-      >
-        <td class="text-right">{{ fixture.teamA }}</td>
-        <td class="text-center">-</td>
-        <td>{{ fixture.teamB }}</td>
-        <td>
-          <input [value]="fixture.goalsA" [readOnly]="isReadonly" /> :
-          <input [value]="fixture.goalsB" [readOnly]="isReadonly" s />
-        </td>
-        <td><i *ngIf="selectedPlayer" class="fa fa-futbol-o"></i></td>
-      </tr>
-    </tbody>
-  </table>
-</form>
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th colspan="5">{{ title }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let fixtureInput of formArray.controls; index as i"
+      [class.win]="isResult(fixtureInput.value, 'Win')"
+      [class.draw]="isResult(fixtureInput.value, 'Draw')"
+      [class.loss]="isResult(fixtureInput.value, 'Loss')"
+      title="Match entered on {{ fixtureInput.value.dateEntered }}"
+    >
+      <td class="text-right">{{ fixtureInput.value.teamA }}</td>
+      <td class="text-center">-</td>
+      <td>{{ fixtureInput.value.teamB }}</td>
+      <td>
+        <form [formGroup]="fixtureInput" ngDefaultControl [attr.name]="i">
+          <input type="number" [attr.name]="i + 'goalsA'" formControlName="goalsA" [readOnly]="isReadonly" /> :
+          <input type="number" [attr.name]="i + 'goalsB'" formControlName="goalsB" [readOnly]="isReadonly" />
+        </form>
+      </td>
+      <td><i *ngIf="selectedPlayer" class="fa fa-futbol-o"></i></td>
+    </tr>
+  </tbody>
+</table>

@@ -21,6 +21,7 @@
         title="Upcoming matches"
         [fixtures]="upcomingfixtures$ | async"
         [isReadonly]="(user$ | async) == null"
+        (fixtureChanged)="onFixtureChange($event)"
       ></lm-fixture-list>
     </div>
   </div>
