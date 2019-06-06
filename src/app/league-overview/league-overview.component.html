@@ -11,7 +11,7 @@
     <div class="fixtures col-xs-12 col-sm-6 col-md-4 col-lg-6 col-xl-3">
       <lm-fixture-list
         title="Latest results"
-        [fixtures]="latestFixtures$ | async"
+        [formState]="latestFixturesForm$ | async"
         [selectedPlayer]="selectedPlayer$ | async"
         [isReadonly]="true"
       ></lm-fixture-list>
@@ -19,8 +19,8 @@
     <div class="fixtures col-xs-12 col-sm-6 col-md-12 col-lg-6 col-xl-3">
       <lm-fixture-list
         title="Upcoming matches"
-        [fixtures]="upcomingfixtures$ | async"
         [isReadonly]="(user$ | async) == null"
+        [formState]="upcomingfixturesForm$ | async"
         (fixtureChanged)="onFixtureChange($event)"
       ></lm-fixture-list>
     </div>

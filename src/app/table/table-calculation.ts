@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import { Fixture, isComplete } from '../fixtures/fixture';
-import { getFullEntry, TableEntry } from './table-entry';
+import { getFullEntry, TableEntry, TableEntryFull } from './table-entry';
 
-const sortTable = (table: TableEntry[], sortOptions: SortOptions) => {
+const sortTable = (table: TableEntryFull[], sortOptions: SortOptions) => {
   const order = sortOptions.ascending ? 'asc' : 'desc';
   const altOrder = order === 'asc' ? 'desc' : 'asc';
   return _.orderBy(table, [sortOptions.criteria, 'goalDifference', 'goalsScored', 'playerName'], [order, order, order, altOrder]);
@@ -13,8 +13,7 @@ export const getTableWithMovement = (fixtures: Fixture[], sortOptions: SortOptio
   const tableSorted = sortTable(table, sortOptions);
   const tableYesterday = getTableYesterday(fixtures, sortOptions);
   const tableWithMovement = setMovement(tableSorted, tableYesterday);
-  const fullTable = tableWithMovement.map(entry => getFullEntry(entry));
-  return fullTable;
+  return tableWithMovement;
 };
 
 export const getTableYesterday = (fixtures: Fixture[], sortOptions: SortOptions) => {
@@ -62,7 +61,7 @@ export const calculateTable = (fixtures: Fixture[]) => {
       goalsConceded: +oldEntryB.goalsConceded + +fixture.goalsA
     });
   }
-  return Array.from(table.values());
+  return Array.from(table.values()).map(entry => getFullEntry(entry));
 };
 
 const ensurePlayerInTable = (entries: Map<string, TableEntry>, player: string) => {
@@ -71,7 +70,7 @@ const ensurePlayerInTable = (entries: Map<string, TableEntry>, player: string) =
   }
 };
 
-const setMovement = (tableToday: TableEntry[], tableYesterday: TableEntry[]) => {
+const setMovement = (tableToday: TableEntryFull[], tableYesterday: TableEntryFull[]) => {
   tableToday.forEach((entry, index) => {
     const indexYesterday = tableYesterday.findIndex(x => x.playerName === entry.playerName);
     tableToday[index].movement = null;
@@ -84,12 +83,12 @@ const setMovement = (tableToday: TableEntry[], tableYesterday: TableEntry[]) => 
   return tableToday;
 };
 
-export const sortBy = (table: TableEntry[], criteria: string, ascending: boolean) => {
+export const sortBy = (table: TableEntryFull[], criteria: keyof TableEntryFull, ascending: boolean) => {
   const sortOptions = { criteria, ascending };
   return sortTable(table, sortOptions);
 };
 
 export interface SortOptions {
-  criteria: string;
+  criteria: keyof TableEntryFull;
   ascending: boolean;
 }

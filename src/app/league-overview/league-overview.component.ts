@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { FormArrayState } from 'ngrx-forms';
 import { Observable } from 'rxjs';
 import { fixtureResultEntered } from '../actions/fixture-list.actions';
 import { playerSelected, sortOptionsChanged } from '../actions/table.actions';
@@ -20,14 +21,14 @@ export class LeagueOverviewComponent {
   public readonly selectedPlayer$: Observable<Player>;
   public readonly fixtures$: Observable<Fixture[]>;
   public readonly table$: Observable<TableEntry[]>;
-  public upcomingfixtures$: Observable<Fixture[]>;
-  public latestFixtures$: Observable<Fixture[]>;
+  public upcomingfixturesForm$: Observable<FormArrayState<Fixture>>;
+  public latestFixturesForm$: Observable<FormArrayState<Fixture>>;
   public readonly user$: Observable<Player>;
 
   constructor(private store: Store<State>) {
     this.selectedPlayer$ = this.store.select(fromLeague.getSelectedPlayer);
-    this.upcomingfixtures$ = this.store.select(fromLeague.getUpcomingFixtures);
-    this.latestFixtures$ = this.store.select(fromLeague.getLatestFixtures);
+    this.upcomingfixturesForm$ = this.store.select(fromLeague.getUpcomingFixturesForm);
+    this.latestFixturesForm$ = this.store.select(fromLeague.getLatestFixturesForm);
     this.table$ = this.store.select(fromLeague.getTable);
     this.user$ = this.store.select(fromAuth.getUser);
   }

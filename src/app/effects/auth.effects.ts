@@ -22,11 +22,10 @@ export class AuthEffects {
   constructor(private actions$: Actions, private readonly store: Store<State>, private readonly firebase: AngularFireAuth) {}
 
   existingAuth = createEffect(() =>
-    combineLatest(
+    combineLatest([
       this.firebase.user.pipe(first(user => user != null)),
       this.store.select(getPlayers).pipe(filter(players => players != null && players.length > 0))
-    ).pipe(
-      tap(console.log),
+    ]).pipe(
       map(([user, players]) => userSessionRestored({ user: players.find(player => player.id === user.email.replace('@enyway.com', '')) }))
     )
   );
@@ -52,7 +51,6 @@ export class AuthEffects {
   sendSignInMail = createEffect(() =>
     this.actions$.pipe(
       ofType(signInMailRequested),
-      tap(console.log),
       exhaustMap(action => {
         window.localStorage.setItem('emailForSignIn', action.email);
         return from(

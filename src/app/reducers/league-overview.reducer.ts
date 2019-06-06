@@ -1,7 +1,8 @@
 import { createReducer, createSelector, on } from '@ngrx/store';
 import { orderBy } from 'lodash/fp';
+import { AbstractControlState, createFormArrayState, FormArrayState, setUserDefinedProperty, setValue } from 'ngrx-forms';
 import { generateFixtures } from 'src/app/fixtures/fixture-generator';
-import { playersLoaded, fixturesLoaded } from '../actions/api.actions';
+import { fixturesLoaded, playersLoaded } from '../actions/api.actions';
 import { playerSelected, sortOptionsChanged } from '../actions/table.actions';
 import { Fixture, hasPlayer, isComplete, isSameMatch } from '../fixtures/fixture';
 import { Player } from '../players/player';
@@ -13,18 +14,28 @@ export interface LeagueOverviewState {
   players: Player[];
   selectedPlayerName: string;
   sortOptions: SortOptions;
+  upcomingFixturesForm: FormArrayState<Fixture>;
+  latestFixturesForm: FormArrayState<Fixture>;
 }
+
+const setReadonly = <T>(state: AbstractControlState<T>) => setUserDefinedProperty(state, 'readonly', true);
 
 const initialState: LeagueOverviewState = {
   playedFixtures: [],
   players: [],
   selectedPlayerName: null,
-  sortOptions: { criteria: 'points', ascending: false }
+  sortOptions: { criteria: 'points', ascending: false },
+  upcomingFixturesForm: createFormArrayState<Fixture>('upcomingFixtures', []),
+  latestFixturesForm: createFormArrayState<Fixture>('latestFixtures', [])
 };
 
 export const leagueOverviewReducer = createReducer(
   initialState,
-  on(fixturesLoaded, (state, { fixtures }) => ({ ...state, playedFixtures: fixtures })),
+  on(fixturesLoaded, (state, { fixtures }) => ({
+    ...state,
+    playedFixtures: fixtures,
+    latestFixturesForm: setReadonly(setValue(state.latestFixturesForm, fixtures))
+  })),
   on(playersLoaded, (state, { players }) => ({ ...state, players })),
   on(sortOptionsChanged, (state, { sortOptions }) => ({ ...state, sortOptions })),
   on(playerSelected, (state, { playerName }) => ({
@@ -65,7 +76,6 @@ const getFixtures = createSelector(
   getPlayedFixtures,
   getSelectedPlayer,
   (generatedFixtures, playedFixtures) => {
-    console.log(generatedFixtures, playedFixtures);
     return generatedFixtures.map(genFix => playedFixtures.find(played => isSameMatch(played, genFix)) || genFix);
   }
 );
@@ -97,4 +107,14 @@ export const getTable = createSelector(
   getFixtures,
   getSortOptions,
   (fixtures, sortOptions) => getTableWithMovement(fixtures, sortOptions)
+);
+
+export const getLatestFixturesForm = createSelector(
+  getLatestFixtures,
+  latestFixtures => createFormArrayState<Fixture>('latestFixtures', latestFixtures)
+);
+
+export const getUpcomingFixturesForm = createSelector(
+  getUpcomingFixtures,
+  upcomingFixtures => createFormArrayState<Fixture>('upcomingFixtures', upcomingFixtures)
 );
