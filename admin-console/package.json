@@ -11,7 +11,7 @@
     "deploy": "git commit -am \"results\" && git push && cd .. && npm install && ng github-pages:deploy"
   },
   "dependencies": {
-    "firebase-admin": "^7.3.0",
+    "firebase-admin": "^11.4.1",
     "ngrx-forms": "^4.0.1",
     "rxjs": "6.4.0"
   },
